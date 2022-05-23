@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.4.26)  23 MAY 2022 15:46
+This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.4.26)  23 MAY 2022 16:02
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -498,12 +498,12 @@ LaTeX Font Warning: Font shape `TU/SimSun(0)/b/it' undefined
 LaTeX Font Warning: Font shape `TU/SimSun(0)/m/sc' undefined
 (Font)              using `TU/SimSun(0)/m/n' instead on input line 42.
 
-LaTeX Font Info:    Trying to load font information for U+msa on input line 65.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 68.
 
 (d:/DevApp/texlive/2022/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 65.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 68.
 
 
 (d:/DevApp/texlive/2022/texmf-dist/tex/latex/amsfonts/umsb.fd
@@ -539,7 +539,7 @@ Package fontspec Info: Font family 'FangSong(0)' created for font 'FangSong'
 File: fig1.png Graphic file (type bmp)
 <fig1.png>
  [3]
-Underfull \hbox (badness 4913) in paragraph at lines 229--233
+Underfull \hbox (badness 4913) in paragraph at lines 232--236
 []\TU/lmr/m/n/10.53937 Please number citations consecutively within
  []
 
@@ -562,7 +562,7 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 Here is how much of TeX's memory you used:
  9329 strings out of 476179
  232357 string characters out of 5809985
- 592667 words of memory out of 5000000
+ 593667 words of memory out of 5000000
  29899 multiletter control sequences out of 15000+600000
  475882 words of font info for 121 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
