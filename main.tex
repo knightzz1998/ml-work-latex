@@ -1,13 +1,20 @@
 \documentclass[conference]{IEEEtran}
 \IEEEoverridecommandlockouts
 % The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{CTEX}
 \usepackage{cite}
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{algorithmic}
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{xcolor}
-\usepackage{ctex}
+% \usepackage[backref]{hyperref}
+\usepackage[colorlinks,
+            linkcolor=green,
+            anchorcolor=green,
+            citecolor=green,
+            backref=page]{hyperref}
+\usepackage{fancyhdr}
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 
@@ -29,6 +36,19 @@
 
 \maketitle
 
+\thispagestyle{fancy} % IEEE模板在\maketitle后会自动声明\thispagestyle{plain}，
+% 导致第一页什么都没有。所以得把plain更改为fancy
+\lhead{} % 页眉左，需要东西的话就在{}内添加
+\chead{} % 页眉中
+\rhead{} % 页眉右
+\lfoot{} % 页脚左
+\cfoot{\thepage} % 页脚中
+\rfoot{} %页脚右，\thepage 表示当前页码
+\renewcommand{\headrulewidth}{0pt} %改为0pt即可去掉页眉下面的横线
+\renewcommand{\footrulewidth}{0pt} %改为0pt即可去掉页脚上面的横线
+
+\pagestyle{fancy}
+\cfoot{\thepage}
 
 
 \begin{abstract}
@@ -71,14 +91,66 @@ DGNNs是建立网络动态模型的一个很有前途的途径，因为它们既
 这个数据集是一个电子邮件通信网络，其中一个链接是两个人之间发送的电子邮件。Enron在空间上是一个很小的网络，但在时间上是一个中等规模的网络，有合理数量的连续链接，覆盖的时间跨度超过3年。
 由于节点数量少，边的数量相对较多，它比其他网络要密集得多。
 
-\subsection{UC Irvine messages}
+\subsubsection{UC Irvine Messages}
 简称UC，是加州大学欧文分校的一个在线论坛网络。如果两个学生在同一个论坛帖子上互动，他们就会被连接起来。
 因此，这原本是一个二方网络，但它被预测为只有一种类型的节点。快照大小的奇特选择来自于EvolveGCN（Pareja等人，2020），它观察到较小的快照大小会产生一些没有任何边的快照
 
+\subsubsection{Bitcoin-OTC}
+这个数据集是一个在比特币OTC平台上交易的谁信任谁的网络。一个链接是一个用户对另一个用户的评价。
+比特币网络在节点方面是中等规模的，然而，它的大多数边是唯一的边，这表明很少有边是重复出现的。缺少重复出现的边缘导致每个快照比其他大多数数据集要稀疏得多。
+
+\subsubsection{Autonomous-systems}
+这个数据集是一个互联网路由器通信网络。一个链接是一个路由器与一个对等体交换流量。这个网络已经被汇总为一个离散的网络并选择前99天，并将其作为我们的数据集。这是迄今为止拥有最多边缘的数据集。
+
+\subsubsection{Wikipedia}
+这个数据集是一个双联的维基百科页面编辑网络。节点是一个维基百科用户或一个维基百科页面。一个链接是一个编辑维基百科页面的用户。维基百科也有很少的重现边缘，与比特币类似，然后有比较稀疏的时间快照。
+
+\subsubsection{Reddit}
+这个数据集是一个双联的Reddit发布网络。节点是一个Reddit用户或一个subreddit。一个链接是一个用户在一个子reddit上的发帖。Reddit是空间上最大的网络，因为它有最大数量的节点和独特的边。
+
+
 \subsection{相关研究模型}
+\subsubsection{GCN}
+GCN借用了卷积神经网络（CNN）的 卷积概念，直接根据图的连通结构对图进行卷积，作为滤波器进行邻域混合
+
+\subsubsection{GAT}
+将注意机制与GNN相结合，旨在 更有效地学习邻里特征。图形注意层作为GAT的组成部 分，对GNN起着聚合作用。它首先对每个节点应用一 个共享的线性变换，由权重矩阵W参数化∈射频0×F
+
+\subsubsection{GC-LSTM}
+这个新的深度模型中的GCN能够为每个时间段滑动节点结构学习网络快照，而LSTM负责网络快照的时间特征学习。
+此外，当前的动态链路预测方法只能处理删除的链接，GC-LSTM可以同时预测添加或删除的链接。
+
+\subsubsection{TGAT}
+时间图注意力（TGAT）层来有效地聚合时间拓扑邻域特征以及学习时间特征交互通过堆叠 TGAT 层，网络将节点嵌入识别为时间的函数，并能够随着图的发展归纳推断新节点和观察到的节点的嵌入。
+TGAT可以同时处理节点分类和链接预测任务，并且可以自然地扩展到包括时间边缘特征。
 
 
- 
+\section{相关方法}
+
+\subsection{Graph Convolutional Networks (GCN)}
+GCN[9]借用了卷积神经网络（CNN）的卷积概念，直接根据图的连通结构对图进行卷积，作为滤波器进行邻域混合。架构可以简单地概括为
+\begin{equation}
+H^{l+1}=\sigma\left(\tilde{D}^{-1 / 2} \tilde{A}^{-1 / 2} \tilde{D}^{-1 / 2} H^{(l)} W^{(l)}\right)
+\end{equation}
+在这里σ 表示sigmoid函数，u和v是两个邻居，而vn是负样本，Q是负样本数。第一项的目标是最大化u和v的嵌入之间的相似性，而第二项则试图区分负样本的嵌入
+
+\subsubsection{Graph Attention Networks (GAT)}
+GAT[17]将注意机制与GNN相结合，旨在更有效地学习邻里特征。图形注意层作为GAT的组成部分，对GNN起着聚合作用。它首先对每个节点应用一个共享的线性变换，由权重矩阵W参数化∈ 射频0×F。然后在节点上执行自我注意，其中使用共享注意机制来计算捕获节点j的特征对节点i的重要性的注意系数，即：
+\begin{equation}
+e_{i j}=a\left(\mathbf{W} h_{i}, \mathbf{W} h_{j}\right)
+\end{equation}
+GAT使用softmax函数对j上的系数进行归一化。因此，注意机制是一个由权重向量a参数化的单层网络∈ R2F 0，然后进行非线性激活（例如LeakyReLU），并获得归一化系数，如下所示：
+\begin{equation}
+\alpha_{i j}=\frac{\exp \left(\operatorname{LeakyReLU}\left(a\left[\mathbf{W} h_{i}, \mathbf{W} h_{j}\right]\right)\right)}{\sum_{k \in N_{i}} \exp \left(\operatorname{LeakyReLU}\left(a\left[\mathbf{W} h_{i}, \mathbf{W} h_{k}\right]\right)\right)}
+\end{equation}
+这些注意系数用于计算邻居特征的线性组合以获得每个节点的聚集特征，即：
+\begin{equation}
+h_{i}^{\prime}=\sum_{k \in N_{i}} \alpha_{i j} \mathbf{W} h_{k}
+\end{equation}
+最后，多头注意（即一套独立的注意机制）被用来稳定自我注意的学习过程。而多头注意力需要用到的算力可能有些相对较大了，不一定说一定适合个人训练，可以使用相关领域的预处理模型来迁移学习。
+
+
+
 \begin{thebibliography}{00}
 \bibitem{zhang2008recommendation}
 J.~Zhang, J.~Tang, B.~Liang, Z.~Yang, S.~Wang, J.~Zuo, and J.~Li,
