@@ -149,7 +149,47 @@ h_{i}^{\prime}=\sum_{k \in N_{i}} \alpha_{i j} \mathbf{W} h_{k}
 \end{equation}
 最后，多头注意（即一套独立的注意机制）被用来稳定自我注意的学习过程。而多头注意力需要用到的算力可能有些相对较大了，不一定说一定适合个人训练，可以使用相关领域的预处理模型来迁移学习。
 
+\subsubsection{Graph Convolution Embedded LSTM}
+LSTM被作为主要框架来学习动态网络的所有快照的时间特征。而对于每个快照，GCN被用来捕捉节点的局部结构特性以及它们之间的关系。一个好处是，GC-LSTM可以预测添加和删除的链接。GCN最初是为无定向网络设计的，这意味着对称网络的拉普拉斯矩阵。
+为了将GCN嵌入提议的GC-LSTM中，我们首先需要重新定义拉普拉斯矩阵。按照Ma等人的想法，有向拉普拉斯矩阵被定义为 :
+\begin{equation}
+	L^{s y m}=I-\frac{1}{2}\left(\Phi^{1 / 2} P \Phi^{-1 / 2}+\Phi^{-1 / 2} P^{T}\right.
+\end{equation}
+GC-LSTM模型主要依靠两个状态值，一个是用于提取最后一次输入信息的隐藏状态h，一个是用于保存长期信息的单元状态c。GC-LSTM的本质是它在前进过程中有一个单元状态c，导致信息在单元状态c上长期传输。
+单元状态可以通过遗忘门和输入门进行更新，定义如下:
+\begin{equation}
+\begin{aligned}
+	&\bar{c}_{t}=\tanh \left(A_{t} W_{c}+G C N_{o}^{K}\left(\tilde{A}_{t-1}, h_{t-1}\right)+b_{c}\right), \\
+	&i_{t}=\sigma\left(A_{t} W_{i}+G C N_{c}^{K}\left(\tilde{A}_{t-1}, h_{t-1}\right)+b_{i}\right) \\
+	&c_{t}=f_{t} \odot G C N_{c}^{K} c_{t-1}+i_{t} \cdot \bar{c}_{t} .
+\end{aligned}
+\end{equation}
+在动态网络链接预测任务中，我们需要考虑邻居的隐藏状态对节点隐藏状态的影响，以及邻居的细胞状态的影响。
 
+
+\subsubsection{TGAT}
+TGAT可以有效地聚集时间-拓扑邻域特征，并学习时间特征的相互作用。通过使用自我注意机制作为构建模块，并在经典的Bochner定理的基础上开发了一种新的功能性时间编码技术，即谐波分析法。通过堆叠TGAT层，网络将节点嵌入识别为时间函数，并且能够在图的演变过程中归纳推断新节点和观察到的节点的嵌入。
+根据原始的自我注意机制，我们首先得到实体-时间特征矩阵为:
+\begin{equation}
+	\mathbf{Z}(t)=\left[\tilde{\mathbf{h}}_{0}^{(l-1)}(t)\left\|\Phi_{d_{T}}(0), \tilde{\mathbf{h}}_{1}^{(l-1)}\left(t_{1}\right)\right\| \Phi_{d_{T}}\left(t-t_{1}\right), \ldots, \tilde{\mathbf{h}}_{N}^{(l-1)}\left(t_{N}\right) \| \Phi_{d_{T}}\left(t-t_{N}\right)\right]^{\top}
+\end{equation}
+并将其转发给三个不同的线性投影，以获得 'query','key' 和 'value'。
+\begin{equation}
+	\mathbf{q}(t)=[\mathbf{Z}(t)]_{0} \mathbf{W}_{Q}, \mathbf{K}(t)=[\mathbf{Z}(t)]_{1: N} \mathbf{W}_{K}, \mathbf{V}(t)=[\mathbf{Z}(t)]_{1: N} \mathbf{W}_{V}
+\end{equation}
+然后，我们将其传递给一个前馈神经网络，以捕捉特征之间的非线性相互作用，如:
+\begin{equation}
+	\begin{aligned}
+	&\tilde{\mathbf{h}}_{0}^{(l)}(t)=\operatorname{FFN}\left(\mathbf{h}(t) \| \mathbf{x}_{0}\right) \equiv \operatorname{ReLU}\left(\left[\mathbf{h}(t) \| \mathbf{x}_{0}\right] \mathbf{W}_{0}^{(l)}+\mathbf{b}_{0}^{(l)}\right) \mathbf{W}_{1}^{(l)}+\mathbf{b}_{1}^{(l)}, \\
+	&\mathbf{W}_{0}^{(l)} \in \mathbb{R}^{\left(d_{h}+d_{0}\right) \times d_{f}}, \mathbf{W}_{1}^{(l)} \in \mathbb{R}^{d_{f} \times d}, \mathbf{b}_{0}^{(l)} \in \mathbb{R}^{d_{f}}, \mathbf{b}_{1}^{(l)} \in \mathbb{R}^{d}
+\end{aligned}
+\end{equation}
+因此，TGAT层可以使用半监督学习框架实现节点分类任务，也可以使用编码器-解码器框架实现链接预测任务。
+
+
+\section{结论}
+在本文中我们介绍并实现几种现有的离散和连续DGNNs的框架。我们对不同的GNN在动态链接预测任务上进行了综合比较。我们的实验表明，这些GNN架构在 其他链路预测任务的基准测试中表现相似。本文的未来有几个有趣的方向。首先，我们的基准数据集仍然相 对较小，将来我们可以在更大的图上评估模型，特别 是在现实世界中的应用。
+本文的第二个有趣的方向是 实现最近开发的GNN模型。此外，我们可以尝试设计和开发我们自己的DGNN架构和链路预测任务的基准测试。	
 
 \begin{thebibliography}{00}
 \bibitem{zhang2008recommendation}
