@@ -52,7 +52,8 @@
 
 
 \begin{abstract}
-图形神经网络（GNNs）正迅速成为在图形结构数据上学习的主导方式。链接预测是新的GNN模型的一个几乎通用的基准。许多先进的模型，如动态图神经网络（DGNNs）专门针对动态链接预测。然而，这些模型，特别是DGNNs，很少与其他模型或现有启发式方法进行比较。不同的工作以不同的方式评估他们的模型，因此人们无法直接比较评估指标。受此启发，我们进行了一次全面的比较研究。我们比较了链接预测启发式方法、GNNs、离散DGNNs和连续DGNNs对动态链接预测的作用。我们发现，简单的链接预测启发式方法往往比GNN和DGNN表现更好，而在所有被考察的图神经网络中，DGNN的表现一直优于静态GNN。
+图形神经网络（GNNs）正迅速成为在图形结构数据上学习的主导方式。链接预测是新的GNN模型的一个几乎通用的基准。
+许多先进的模型，如动态图神经网络（DGNNs）专门针对动态链接预测。	然而，这些模型，特别是DGNNs，很少与其他模型或现有启发式方法进行比较。不同的工作以不同的方式评估他们的模型，因此人们无法直接比较评估指标。受此启发，我们进行了一次全面的比较研究。我们比较了链接预测启发式方法、GNNs、离散DGNNs和连续DGNNs对动态链接预测的作用。我们发现，简单的链接预测启发式方法往往比GNN和DGNN表现更好，而在所有被考察的图神经网络中，DGNN的表现一直优于静态GNN。
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -64,26 +65,30 @@
 在本文中主要的研究内容是在动态图上的链接预测, 与静态图的链接预测不同的是, 动态图的链接预测增加了时间维度, 预测难度增加, 但是在现实中的应用更加广泛。
 
 \subsection{研究方法}
-在近年来的研究中, 很多链路预测方法取得了发展, 在静态图上研究者们提出了很多高精度的链接预测方法。比如基于启发式算法的共同邻居算法\cite{zhang2008recommendation}, 
-以及首次将GNN应用在图的链接预测的SEAL模型\cite{zhang2008recommendation}, SEAL模型
+在近年来的研究中, 很多链路预测方法取得了发展, 在静态图上研究者们提出了很多高精度的链接预测方法。
+比如基于启发式算法的共同邻居算法\cite{papadopoulos2015network}, 
+以及首次将GNN应用在图的链接预测的SEAL模型\cite{zhang2018link}, SEAL模型通过将GNN与启发式算法融合在静态图的预测上有很
+高的精度。动态图的链接预测增加了时间维度, 不同的时间段的图的结构和链接节点之间有差异\cite{peng2021dynamic}, 所以这导致了在动态图的预测的难度大大增加。
+为了解决这些问题, 研究者们提出了很多动态预测的方法。有研究者提出GC-LSTM\cite{chen2018gc}, 通过融合GCN和LSTM来处理动态图的时间序列, 
+也有研究者通过将GCN分别嵌入LSTM和GRU\cite{pareja2020evolvegcn}在不同的任务场景上得到很好的效果。
+
 
 \subsection{研究问题}
 
-近年来，图神经网络（GNNs）作为一个新兴的研 究领域，得到了长足的发展，提出并发展了多种体系结构。但是在动态图神经网络（DGNN）领域，这些问题因以下原因而进一步加剧：
+近年来，图神经网络（GNNs）作为一个新兴的研究领域，得到了长足的发展，很多研究者提出并发展了多种体系结构\cite{zhang2019graph}。
+但是在动态图神经网络（DGNN）领域，这些问题因以下原因而进一步加剧：
 
-\subsubsection{数据的动态性质}
-\subsubsection{缺乏通用术语}
+
 \subsubsection{缺乏既定的强大基线（大多数研究不与其他DGNN比较性能）}
-\subsubsection{离散和连续DGNN之间的鸿沟}
+动态链接预测任务基线的不统一, 不同的工作中使用的BaseLine不同, 导致对现有工作进行合理的评估。
 \subsubsection{大量的实验设计选择}
-这些选择包括：如何表示动态网络（如快照、时间窗口、连续、边的生存时间等），包括哪些节点特征，如何将数据分成训练-验证-测试集，用哪些指标来评价结果，如何在报告的指标中使用负采样率，以及如何选择/优化神经网络参数（如学习率、早期停止准则、嵌入空间维度等）。所有这些都意味着，通过阅读研究论文来比较方法的性能是不可能的，除非他们清楚地说明他们所有的设计选择，而且这些设计选择在不同的论文中是相同的。
 这些选择包括：如何表示动态网络（如快照、时间窗口、连续、边的生存时间等），包括哪些节点特征，如何将数据分成训练-验证-测试集，用哪些指标来评价结果，如何在报告的指标中使用负采样率，以及如何选择/优化神经网络参数（如学习率、早期停止准则、嵌入空间维度等）。所有这些都意味着，通过阅读研究论文来比较方法的性能是不可能的，除非他们清楚地说明他们所有的设计选择，而且这些设计选择在不同的论文中是相同的。
 DGNNs是建立网络动态模型的一个很有前途的途径，因为它们既能通过GNNs编码空间模式，又能通过时间序列组件（如循环神经网络（RNN）或自我注意）编码时间模式。然而，迄今为止提出的DGNNs已经在少数数据集上进行了测试，并且很少与其他DGNNs进行比较。不同的研究在不同的数据集上进行比较，因为在DGNN基准测试中使用哪种数据集的问题上没有共识。
 
 \section{相关研究模型与数据集}
 
 \subsection{相关数据集}
-我们选择了五个连续的交互网络和一个离散的演化网络（Autonomous）作为数据集。我们选择了互动网络，因为它们允许我们轻松地转换为更粗粒度的时间粒度，如离散网络。更稀疏的快照表明链接和非链接之间有更大的不平衡性，从而使分类问题更难。我们为每个数据集准备了两个版本，一个是有方向的连续交互网络，一个是无方向的离散网络。连续模型对连续网络进行编码。静态和离散模型对离散网络进行编码。在从连续到离散的转换中，互换的边缘被添加到离散网络中，使其成为无定向的。一条边在快照中出现的次数被作为权重加到快照的边上。
+我们选择了五个连续的交互网络和一个离散的演化网络作为数据集。我们选择了互动网络，因为它们允许我们轻松地转换为更粗粒度的时间粒度，如离散网络。更稀疏的快照表明链接和非链接之间有更大的不平衡性，从而使分类问题更难。我们为每个数据集准备了两个版本，一个是有方向的连续交互网络，一个是无方向的离散网络。连续模型对连续网络进行编码。静态和离散模型对离散网络进行编码。在从连续到离散的转换中，互换的边缘被添加到离散网络中，使其成为无定向的。一条边在快照中出现的次数被作为权重加到快照的边上。
 所有的结果都是对离散网络的预测报告。对于连续模型，这是通过将连续网络的连续部分分割成与离散网络中的快照相对应的快照来实现的。然后，我们让连续模型在目标快照前对连续网络进行编码，然后尝试预测离散网络中的链接发生。
 在本文中，我们使用了以下数据集：
 
@@ -111,31 +116,31 @@ DGNNs是建立网络动态模型的一个很有前途的途径，因为它们既
 
 \subsection{相关研究模型}
 \subsubsection{GCN}
-GCN借用了卷积神经网络（CNN）的 卷积概念，直接根据图的连通结构对图进行卷积，作为滤波器进行邻域混合
+GCN\cite{kipf2016semi}借用了卷积神经网络（CNN）的 卷积概念，直接根据图的连通结构对图进行卷积，作为滤波器进行邻域混合
 
 \subsubsection{GAT}
-将注意机制与GNN相结合，旨在 更有效地学习邻里特征。图形注意层作为GAT的组成部 分，对GNN起着聚合作用。它首先对每个节点应用一 个共享的线性变换，由权重矩阵W参数化∈射频0×F
+GAT\cite{velivckovic2017graph}将注意机制与GNN相结合，旨在 更有效地学习邻里特征。图形注意层作为GAT的组成部 分，对GNN起着聚合作用。它首先对每个节点应用一 个共享的线性变换，由权重矩阵W参数化∈射频0×F
 
 \subsubsection{GC-LSTM}
-这个新的深度模型中的GCN能够为每个时间段滑动节点结构学习网络快照，而LSTM负责网络快照的时间特征学习。
+GC-LSTM\cite{chen2018gc}中的GCN能够为每个时间段滑动节点结构学习网络快照，而LSTM负责网络快照的时间特征学习。
 此外，当前的动态链路预测方法只能处理删除的链接，GC-LSTM可以同时预测添加或删除的链接。
 
 \subsubsection{TGAT}
-时间图注意力（TGAT）层来有效地聚合时间拓扑邻域特征以及学习时间特征交互通过堆叠 TGAT 层，网络将节点嵌入识别为时间的函数，并能够随着图的发展归纳推断新节点和观察到的节点的嵌入。
+时间图注意力TGAT\cite{cui2021dygcn}通过有效地聚合时间拓扑邻域特征以及学习时间特征交互通过堆叠 TGAT 层，网络将节点嵌入识别为时间的函数，并能够随着图的发展归纳推断新节点和观察到的节点的嵌入。
 TGAT可以同时处理节点分类和链接预测任务，并且可以自然地扩展到包括时间边缘特征。
 
 
 \section{相关方法}
 
 \subsection{Graph Convolutional Networks (GCN)}
-GCN[9]借用了卷积神经网络（CNN）的卷积概念，直接根据图的连通结构对图进行卷积，作为滤波器进行邻域混合。架构可以简单地概括为
+GCN\cite{kipf2016semi}借用了卷积神经网络（CNN）的卷积概念，直接根据图的连通结构对图进行卷积，作为滤波器进行邻域混合。架构可以简单地概括为
 \begin{equation}
 H^{l+1}=\sigma\left(\tilde{D}^{-1 / 2} \tilde{A}^{-1 / 2} \tilde{D}^{-1 / 2} H^{(l)} W^{(l)}\right)
 \end{equation}
 在这里σ 表示sigmoid函数，u和v是两个邻居，而vn是负样本，Q是负样本数。第一项的目标是最大化u和v的嵌入之间的相似性，而第二项则试图区分负样本的嵌入
 
 \subsubsection{Graph Attention Networks (GAT)}
-GAT[17]将注意机制与GNN相结合，旨在更有效地学习邻里特征。图形注意层作为GAT的组成部分，对GNN起着聚合作用。它首先对每个节点应用一个共享的线性变换，由权重矩阵W参数化∈ 射频0×F。然后在节点上执行自我注意，其中使用共享注意机制来计算捕获节点j的特征对节点i的重要性的注意系数，即：
+GAT\cite{velivckovic2017graph}将注意机制与GNN相结合，旨在更有效地学习邻里特征。图形注意层作为GAT的组成部分，对GNN起着聚合作用。它首先对每个节点应用一个共享的线性变换，由权重矩阵W参数化∈ 射频0×F。然后在节点上执行自我注意，其中使用共享注意机制来计算捕获节点j的特征对节点i的重要性的注意系数，即：
 \begin{equation}
 e_{i j}=a\left(\mathbf{W} h_{i}, \mathbf{W} h_{j}\right)
 \end{equation}
@@ -192,17 +197,74 @@ TGAT可以有效地聚集时间-拓扑邻域特征，并学习时间特征的相
 本文的第二个有趣的方向是 实现最近开发的GNN模型。此外，我们可以尝试设计和开发我们自己的DGNN架构和链路预测任务的基准测试。	
 
 \begin{thebibliography}{00}
-\bibitem{zhang2008recommendation}
-J.~Zhang, J.~Tang, B.~Liang, Z.~Yang, S.~Wang, J.~Zuo, and J.~Li,
-``Recommendation over a heterogeneous social network,'' in \emph{Web-Age
-	Information Management, 2008. WAIM'08. The Ninth International Conference
-	on}.\hskip 1em plus 0.5em minus 0.4em\relax IEEE, 2008, pp. 309--316.
+\bibitem{jeon2020efficient}
+G.~Jeon, H.~Jeong, and J.~Choi, ``An efficient explorative sampling considering
+the generative boundaries of deep generative neural networks,'' in
+\emph{Proceedings of the AAAI Conference on Artificial Intelligence},
+vol.~34, no.~04, 2020, pp. 4288--4295.
 
-\bibitem{Ronneberger2015U}
-O.~Ronneberger, P.~Fischer, and T.~Brox, \emph{U-Net: Convolutional Networks
-	for Biomedical Image Segmentation}.\hskip 1em plus 0.5em minus 0.4em\relax
-Springer International Publishing, 2015.
+\bibitem{kipf2016semi}
+T.~N. Kipf and M.~Welling, ``Semi-supervised classification with graph
+convolutional networks,'' \emph{arXiv preprint arXiv:1609.02907}, 2016.
+
+\bibitem{velivckovic2017graph}
+P.~Veli{\v{c}}kovi{\'c}, G.~Cucurull, A.~Casanova, A.~Romero, P.~Lio, and
+Y.~Bengio, ``Graph attention networks,'' \emph{arXiv preprint
+	arXiv:1710.10903}, 2017.
+
+\bibitem{zhang2018link}
+M.~Zhang and Y.~Chen, ``Link prediction based on graph neural networks,''
+\emph{Advances in neural information processing systems}, vol.~31, 2018.
+
+\bibitem{xu2020inductive}
+D.~Xu, C.~Ruan, E.~Korpeoglu, S.~Kumar, and K.~Achan, ``Inductive
+representation learning on temporal graphs,'' \emph{arXiv preprint
+	arXiv:2002.07962}, 2020.
+
+\bibitem{chen2018gc}
+J.~Chen, X.~Wang, and X.~Xu, ``Gc-lstm: Graph convolution embedded lstm for
+dynamic link prediction,'' \emph{arXiv preprint arXiv:1812.04206}, 2018.
+
+\bibitem{pareja2020evolvegcn}
+A.~Pareja, G.~Domeniconi, J.~Chen, T.~Ma, T.~Suzumura, H.~Kanezashi, T.~Kaler,
+T.~Schardl, and C.~Leiserson, ``Evolvegcn: Evolving graph convolutional
+networks for dynamic graphs,'' in \emph{Proceedings of the AAAI Conference on
+	Artificial Intelligence}, vol.~34, no.~04, 2020, pp. 5363--5370.
+
+\bibitem{zhang2019graph}
+S.~Zhang, H.~Tong, J.~Xu, and R.~Maciejewski, ``Graph convolutional networks: a
+comprehensive review,'' \emph{Computational Social Networks}, vol.~6, no.~1,
+pp. 1--23, 2019.
+
+\bibitem{gao2022novel}
+C.~Gao, J.~Zhu, F.~Zhang, Z.~Wang, and X.~Li, ``A novel representation learning
+for dynamic graphs based on graph convolutional networks,'' \emph{IEEE
+	Transactions on Cybernetics}, 2022.
+
+\bibitem{cui2021dygcn}
+Z.~Cui, Z.~Li, S.~Wu, X.~Zhang, Q.~Liu, L.~Wang, and M.~Ai, ``Dygcn: dynamic
+graph embedding with graph convolutional network,'' \emph{arXiv preprint
+	arXiv:2104.02962}, 2021.
+
+\bibitem{peng2021dynamic}
+H.~Peng, B.~Du, M.~Liu, M.~Liu, S.~Ji, S.~Wang, X.~Zhang, and L.~He, ``Dynamic
+graph convolutional network for long-term traffic flow prediction with
+reinforcement learning,'' \emph{Information Sciences}, vol. 578, pp.
+401--416, 2021.
+
+\bibitem{qiu2020dgcn}
+Z.~Qiu, K.~Qiu, J.~Fu, and D.~Fu, ``Dgcn: Dynamic graph convolutional network
+for efficient multi-person pose estimation,'' in \emph{Proceedings of the
+	AAAI Conference on Artificial Intelligence}, vol.~34, no.~07, 2020, pp.
+11\,924--11\,931.
+
+\bibitem{papadopoulos2015network}
+F.~Papadopoulos, R.~Aldecoa, and D.~Krioukov, ``Network geometry inference
+  using common neighbors,'' \emph{Physical Review E}, vol.~92, no.~2, p.
+  022807, 2015.
+
 \end{thebibliography}
+
 
 % \bibliography{ref}
 \end{document}
